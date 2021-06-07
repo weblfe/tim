@@ -13,7 +13,6 @@ package tim
 type ApiPath string
 
 const (
-
 	VERSION = "v4"
 	BaseUrl = "https://console.tim.qq.com"
 
@@ -85,4 +84,6 @@ const (
 	//运营管理
 	GetHistoryApi ApiPath = "/open_msg_svc/get_history" //下载消息记录	v4/open_msg_svc/get_history
 	GetAppInfoApi ApiPath = "/openconfigsvr/getappinfo" //拉取运营数据	v4/openconfigsvr/getappinfo
+	// 全员推送
+	PostPushAll ApiPath = "/all_member_push/im_push" // 支持全员推送。
 )
