@@ -64,7 +64,7 @@ func (s IMServer) request(url string, requestJson []byte) ([]byte, error) {
 
 	// Create request
 	req, err := http.NewRequest("POST", url, body)
-	if err!= nil {
+	if err != nil {
 		log.Panic(err)
 	}
 	// Headers
@@ -129,4 +129,8 @@ func (s IMServer) combineURL(path ApiPath) string {
 
 	return fmt.Sprintf("%s/%s%s?sdkappid=%d&identifier=%s&usersig=%s&random=%d&contenttype=json",
 		BaseUrl, VERSION, path, s.AppId, s.Identifier, s.Sig, rand.Intn(4294967294))
+}
+
+func (s IMServer) Do(path ApiPath, v interface{}) (jsons []byte, err error) {
+	return s.requestWithPath(path,v)
 }
