@@ -21,7 +21,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/weblfe/tim/tools/sign"
+	sign2 "github.com/tencentyun/tls-sig-api-v2-golang/tencentyun"
 )
 
 type IMServer struct {
@@ -117,7 +117,7 @@ func (s IMServer) requestWithPath(path ApiPath, v interface{}) (jsons []byte, er
 }
 
 func (s IMServer) userSig() (string, error) {
-	userSig, err := sign.GenSig(s.AppId, s.SecretKey, s.Identifier, s.Expire)
+	userSig, err := sign2.GenUserSig(s.AppId, s.SecretKey, s.Identifier, s.Expire)
 	if err != nil {
 		return "", err
 	}
