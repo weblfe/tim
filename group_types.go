@@ -32,26 +32,26 @@ const (
 //MemberList	Array	选填	初始群成员列表，最多500个；成员信息字段详情请参阅 群成员资料
 //AppMemberDefinedData	Array	选填	群成员维度的自定义字段，默认情况是没有的，需要开通，详情请参阅 自定义字段
 type Group struct {
-	OwnerAccount    string           `json:"Owner_Account"`
+	OwnerAccount    string           `json:"Owner_Account,omitempty"`
 	Type            string           `json:"Type"`
-	GroupID         string           `json:"GroupId"`
+	GroupID         string           `json:"GroupId,omitempty"`
 	Name            string           `json:"Name"`
-	Introduction    string           `json:"Introduction"`
-	Notification    string           `json:"Notification"`
-	FaceURL         string           `json:"FaceUrl"`
-	MaxMemberCount  int              `json:"MaxMemberCount"`
-	CreateTime      int              `json:"CreateTime"`
-	ApplyJoinOption string           `json:"ApplyJoinOption"`
-	AppDefinedData  []AppDefinedData `json:"AppDefinedData"`
-	MemberList      []MemberList     `json:"MemberList"`
-	ErrorCode       int              `json:"ErrorCode"`
-	ErrorInfo       string           `json:"ErrorInfo"`
+	Introduction    string           `json:"Introduction,omitempty"`
+	Notification    string           `json:"Notification,omitempty"`
+	FaceURL         string           `json:"FaceUrl,omitempty"`
+	MaxMemberCount  int              `json:"MaxMemberCount,omitempty"`
+	CreateTime      int              `json:"CreateTime,omitempty"`
+	ApplyJoinOption string           `json:"ApplyJoinOption,omitempty"`
+	AppDefinedData  []AppDefinedData `json:"AppDefinedData,omitempty"`
+	MemberList      []MemberList     `json:"MemberList,omitempty"`
+	ErrorCode       int              `json:"ErrorCode,omitempty"`
+	ErrorInfo       string           `json:"ErrorInfo,omitempty"`
 }
 
 type MemberList struct {
 	MemberAccount        string           `json:"Member_Account"`
 	Role                 string           `json:"Role"`
-	JoinTime             int64            `json:"JoinTime"`
+	JoinTime             int64            `json:"JoinTime,omitempty"`
 	MsgSeq               int              `json:"MsgSeq"`
 	MsgFlag              string           `json:"MsgFlag"`
 	LastSendMsgTime      int              `json:"LastSendMsgTime"`
@@ -112,13 +112,13 @@ const (
 type ModifyGroup struct {
 	GroupID         string           `json:"GroupId"`
 	Name            string           `json:"Name"`
-	Introduction    string           `json:"Introduction"`
-	Notification    string           `json:"Notification"`
-	FaceURL         string           `json:"FaceUrl"`
-	MaxMemberNum    int              `json:"MaxMemberNum"`
-	ApplyJoinOption ApplyJoinOption  `json:"ApplyJoinOption"`
-	ShutUpAllMember string           `json:"ShutUpAllMember"`
-	AppDefinedData  []AppDefinedData `json:"AppDefinedData"`
+	Introduction    string           `json:"Introduction,omitempty"`
+	Notification    string           `json:"Notification,omitempty"`
+	FaceURL         string           `json:"FaceUrl,omitempty"`
+	MaxMemberNum    int              `json:"MaxMemberNum,omitempty"`
+	ApplyJoinOption ApplyJoinOption  `json:"ApplyJoinOption,omitempty"`
+	ShutUpAllMember string           `json:"ShutUpAllMember,omitempty"`
+	AppDefinedData  []AppDefinedData `json:"AppDefinedData,omitempty"`
 }
 
 // GroupId	String	必填	操作的群 ID
@@ -146,10 +146,10 @@ type ModifyGroupMemberInfo struct {
 //GroupType	String	选填	拉取哪种群组形态，例如 Private，Public，ChatRoom 或 AVChatRoom，不填为拉取所有
 type JoinGroupList struct {
 	MemberAccount  string         `json:"Member_Account"`
-	Limit          int            `json:"Limit"`
-	Offset         int            `json:"Offset"`
-	GroupType      string         `json:"GroupType"`
-	ResponseFilter ResponseFilter `json:"ResponseFilter"`
+	Limit          int            `json:"Limit,omitempty"`
+	Offset         int            `json:"Offset,omitempty"`
+	GroupType      string         `json:"GroupType,omitempty"`
+	ResponseFilter ResponseFilter `json:"ResponseFilter,omitempty"`
 }
 
 //ResponseFilter	Object	选填	分别包含 GroupBaseInfoFilter 和 SelfInfoFilter
@@ -193,14 +193,14 @@ type ShuttedUinList struct {
 // ForbidCallbackControl	Array	选填	消息回调禁止开关，只对单条消息有效，ForbidBeforeSendMsgCallback 表示禁止发消息前回调，ForbidAfterSendMsgCallback 表示禁止发消息后回调
 // OnlineOnlyFlag	Integer	选填	1表示消息仅发送在线成员，默认0表示发送所有成员，音视频聊天室（AVChatRoom）和在线成员广播大群（BChatRoom）不支持该参数
 type GroupMsg struct {
-	GroupID               string          `json:"GroupId"`
-	Random                int             `json:"Random"`
-	FromAccount           string          `json:"From_Account"`
-	MsgPriority           string          `json:"MsgPriority"`
-	OnlineOnlyFlag        int             `json:"OnlineOnlyFlag"`
-	ForbidCallbackControl []string        `json:"ForbidCallbackControl"`
-	MsgBody               []MsgBody       `json:"MsgBody"`
-	OfflinePushInfo       OfflinePushInfo `json:"OfflinePushInfo"`
+	GroupID               string          `json:"GroupId,omitempty"`
+	Random                int             `json:"Random,omitempty"`
+	FromAccount           string          `json:"From_Account,omitempty"`
+	MsgPriority           string          `json:"MsgPriority,omitempty"`
+	OnlineOnlyFlag        int             `json:"OnlineOnlyFlag,omitempty"`
+	ForbidCallbackControl []string        `json:"ForbidCallbackControl,omitempty"`
+	MsgBody               []MsgBody       `json:"MsgBody,omitempty"`
+	OfflinePushInfo       OfflinePushInfo `json:"OfflinePushInfo,omitempty"`
 }
 
 type MsgSeqList struct {
