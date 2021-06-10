@@ -149,7 +149,7 @@ type JoinGroupList struct {
 	Limit          int            `json:"Limit,omitempty"`
 	Offset         int            `json:"Offset,omitempty"`
 	GroupType      string         `json:"GroupType,omitempty"`
-	ResponseFilter ResponseFilter `json:"ResponseFilter,omitempty"`
+	ResponseFilter *ResponseFilter `json:"ResponseFilter,omitempty"`
 }
 
 //ResponseFilter	Object	选填	分别包含 GroupBaseInfoFilter 和 SelfInfoFilter
