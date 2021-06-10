@@ -59,7 +59,7 @@ func (s IMServer) ListenCallback() {
 func (s IMServer) request(url string, requestJson []byte) ([]byte, error) {
 	body := bytes.NewBuffer(requestJson)
 	// Create client
-	fmt.Println(string(requestJson))
+	log.Println(string(requestJson))
 	client := &http.Client{}
 
 	// Create request
@@ -100,7 +100,7 @@ func (s IMServer) request(url string, requestJson []byte) ([]byte, error) {
 			"https://cloud.tencent.com/document/product/269/1671", respCheck.ErrorCode, respCheck.ErrorInfo)
 	}
 
-	log.Println("response Body : ", string(respBody))
+	log.Println(string(respBody))
 	return respBody, nil
 
 }
