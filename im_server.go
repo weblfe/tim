@@ -76,7 +76,11 @@ func (s IMServer) request(url string, requestJson []byte) ([]byte, error) {
 		return nil, err
 	}
 
-	defer resp.Body.Close()
+	defer func(){
+		if err:=resp.Body.Close();err!=nil{
+			log.Println("response body close error:",err)
+		}
+	}()
 
 	// Read Response Body
 	respBody, _ := ioutil.ReadAll(resp.Body)
@@ -96,7 +100,7 @@ func (s IMServer) request(url string, requestJson []byte) ([]byte, error) {
 			"https://cloud.tencent.com/document/product/269/1671", respCheck.ErrorCode, respCheck.ErrorInfo)
 	}
 
-	fmt.Println("response Body : ", string(respBody))
+	log.Println("response Body : ", string(respBody))
 	return respBody, nil
 
 }
