@@ -135,7 +135,7 @@ type ModifyGroupMemberInfo struct {
 	Role                 string           `json:"Role"`
 	NameCard             string           `json:"NameCard"`
 	MsgFlag              string           `json:"MsgFlag"`
-	AppMemberDefinedData []AppDefinedData `json:"AppMemberDefinedData"`
+	AppMemberDefinedData []AppDefinedData `json:"AppMemberDefinedData,omitempty"`
 }
 
 //Member_Account	String	必填	需要查询的用户帐号
@@ -193,14 +193,14 @@ type ShuttedUinList struct {
 // ForbidCallbackControl	Array	选填	消息回调禁止开关，只对单条消息有效，ForbidBeforeSendMsgCallback 表示禁止发消息前回调，ForbidAfterSendMsgCallback 表示禁止发消息后回调
 // OnlineOnlyFlag	Integer	选填	1表示消息仅发送在线成员，默认0表示发送所有成员，音视频聊天室（AVChatRoom）和在线成员广播大群（BChatRoom）不支持该参数
 type GroupMsg struct {
-	GroupID               string          `json:"GroupId,omitempty"`
-	Random                int             `json:"Random,omitempty"`
-	FromAccount           string          `json:"From_Account,omitempty"`
-	MsgPriority           string          `json:"MsgPriority,omitempty"`
-	OnlineOnlyFlag        int             `json:"OnlineOnlyFlag,omitempty"`
-	ForbidCallbackControl []string        `json:"ForbidCallbackControl,omitempty"`
-	MsgBody               []MsgBody       `json:"MsgBody,omitempty"`
-	OfflinePushInfo       OfflinePushInfo `json:"OfflinePushInfo,omitempty"`
+	GroupID               string           `json:"GroupId,omitempty"`
+	Random                int              `json:"Random,omitempty"`
+	FromAccount           string           `json:"From_Account,omitempty"`
+	MsgPriority           string           `json:"MsgPriority,omitempty"`
+	OnlineOnlyFlag        int              `json:"OnlineOnlyFlag,omitempty"`
+	ForbidCallbackControl []string         `json:"ForbidCallbackControl,omitempty"`
+	MsgBody               []MsgBody        `json:"MsgBody,omitempty"`
+	OfflinePushInfo       *OfflinePushInfo `json:"OfflinePushInfo,omitempty"`
 }
 
 type MsgSeqList struct {
