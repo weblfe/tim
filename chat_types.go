@@ -78,10 +78,10 @@ func NewLocationElem(desc string, latitude, longitude float64) MsgBody {
 	return MsgBody{
 		MsgContent: MsgContent{
 			LocationContent: LocationContent{
-				Desc:      desc,
 				Latitude:  latitude,
 				Longitude: longitude,
 			},
+			Desc:      desc,
 		},
 		MsgType: LocationElem,
 	}
@@ -93,8 +93,9 @@ func NewLocationElem(desc string, latitude, longitude float64) MsgBody {
 func NewFaceElem(index int, data string) MsgBody {
 	return MsgBody{
 		MsgContent: MsgContent{
+			Data:  data,
 			FaceContent: FaceContent{
-				Data:  data,
+
 				Index: index,
 			},
 		},
@@ -112,9 +113,9 @@ func NewFaceElem(index int, data string) MsgBody {
 func NewCustomElem(data, desc, ext, sound string) MsgBody {
 	return MsgBody{
 		MsgContent: MsgContent{
+			Data:  data,
+			Desc:  desc,
 			CustomContent: CustomContent{
-				Data:  data,
-				Desc:  desc,
 				Ext:   ext,
 				Sound: sound,
 			},
@@ -266,20 +267,25 @@ type MsgContent struct {
 	FileContent
 	// 视频消息
 	VideoContent
+	// 公共字段
+	Data         string `json:"Data,omitempty"`
+	Desc         string `json:"Desc,omitempty"`
+	Size         int    `json:"Size,omitempty"`
+	DownloadFlag int    `json:"Download_Flag,omitempty"`
 }
 
 // 自定义消息
 type CustomContent struct {
-	Data  string `json:"Data,omitempty"`
-	Desc  string `json:"Desc,omitempty"`
+	// Data  string `json:"Data,omitempty"`
+	// Desc  string `json:"Desc,omitempty"`
 	Ext   string `json:"Ext,omitempty"`
 	Sound string `json:"Sound,omitempty"`
 }
 
 // 表情消息
 type FaceContent struct {
-	Data  string `json:"Data,omitempty"`
-	Index int    `json:"Index,omitempty"`
+	// Data  string `json:"Data,omitempty"`
+	Index int `json:"Index,omitempty"`
 }
 
 // 文本消息
@@ -291,7 +297,6 @@ type TextContent struct {
 type LocationContent struct {
 	Latitude  float64 `json:"Latitude,omitempty"`
 	Longitude float64 `json:"Longitude,omitempty"`
-	Desc      string  `json:"Desc,omitempty"`
 }
 
 // 视频消息
@@ -311,17 +316,17 @@ type VideoContent struct {
 
 // 声音消息
 type SoundContent struct {
-	Size         int `json:"Size,omitempty"`
-	Second       int `json:"Second,omitempty"`
-	DownloadFlag int `json:"Download_Flag,omitempty"`
+	// Size         int `json:"Size,omitempty"`
+	Second int `json:"Second,omitempty"`
+	// DownloadFlag int `json:"Download_Flag,omitempty"`
 }
 
 // 文件
 type FileContent struct {
-	Url          string `json:"Url,omitempty"`           // 文件下载地址，可通过该 URL 地址直接下载相应文件。
-	FileSize     int    `json:"FileSize,omitempty"`      // 文件数据大小，单位：字节。
-	FileName     string `json:"FileName,omitempty"`      // 文件名称。
-	DownloadFlag uint   `json:"Download_Flag,omitempty"` // 文件下载方式标记。目前 Download_Flag 取值只能为2，表示可通过Url字段值的 URL 地址直接下载文件。
+	Url      string `json:"Url,omitempty"`      // 文件下载地址，可通过该 URL 地址直接下载相应文件。
+	FileSize int    `json:"FileSize,omitempty"` // 文件数据大小，单位：字节。
+	FileName string `json:"FileName,omitempty"` // 文件名称。
+	// DownloadFlag uint   `json:"Download_Flag,omitempty"` // 文件下载方式标记。目前 Download_Flag 取值只能为2，表示可通过Url字段值的 URL 地址直接下载文件。
 }
 
 // 图片消息
