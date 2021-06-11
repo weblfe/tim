@@ -311,17 +311,17 @@ type VideoContent struct {
 
 // 声音消息
 type SoundContent struct {
-	Size         int `json:"Size"`
+	Size         int `json:"Size,omitempty"`
 	Second       int `json:"Second,omitempty"`
 	DownloadFlag int `json:"Download_Flag,omitempty"`
 }
 
 // 文件
 type FileContent struct {
-	Url          string // 文件下载地址，可通过该 URL 地址直接下载相应文件。
-	FileSize     int    // 文件数据大小，单位：字节。
-	FileName     string // 文件名称。
-	DownloadFlag uint   // 文件下载方式标记。目前 Download_Flag 取值只能为2，表示可通过Url字段值的 URL 地址直接下载文件。
+	Url          string `json:"Url,omitempty"`           // 文件下载地址，可通过该 URL 地址直接下载相应文件。
+	FileSize     int    `json:"FileSize,omitempty"`      // 文件数据大小，单位：字节。
+	FileName     string `json:"FileName,omitempty"`      // 文件名称。
+	DownloadFlag uint   `json:"Download_Flag,omitempty"` // 文件下载方式标记。目前 Download_Flag 取值只能为2，表示可通过Url字段值的 URL 地址直接下载文件。
 }
 
 // 图片消息
