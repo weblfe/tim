@@ -4,19 +4,67 @@ const (
 	//TimTextElem	文本消息。
 	TextElem = "TimTextElem"
 	//LocationElem	地理位置消息。
-	LocationElem = "LocationElem"
+	LocationElem = "TIMLocationElem"
 	//FaceElem	表情消息。
-	FaceElem = "FaceElem"
+	FaceElem = "TIMFaceElem"
 	//CustomElem	自定义消息，当接收方为 iOS 系统且应用处在后台时，此消息类型可携带除文本以外的字段到 APNs。一条组合消息中只能包含一个 CustomElem 自定义消息元素
-	CustomElem = "CustomElem"
+	CustomElem = "TIMCustomElem"
+	// 语音消息
+	SoundElem = "TIMSoundElem"
+	// 图像消息
+	ImageElem = "TIMImageElem"
+	// 文件消息
+	FileElem = "TIMFileElem"
+	// 视频消息
+	VideoFileElem = "TIMVideoFileElem"
 )
+
+// 声音消息
+func NewSoundElem(sound SoundContent) MsgBody {
+	return MsgBody{
+		MsgContent: MsgContent{
+			SoundContent: sound,
+		},
+		MsgType: SoundElem,
+	}
+}
+
+// 图片消息
+func NewImageElem(images MsgImageContent) MsgBody {
+	return MsgBody{
+		MsgContent: MsgContent{
+			MsgImageContent: images,
+		},
+		MsgType: ImageElem,
+	}
+}
+
+// 文件消息
+func NewFileElem(file FileContent) MsgBody {
+	return MsgBody{
+		MsgContent: MsgContent{
+			FileContent: file,
+		},
+		MsgType: FileElem,
+	}
+}
+
+// 视频消息
+func NewVideoElem(video VideoContent) MsgBody {
+	return MsgBody{
+		MsgContent: MsgContent{
+			VideoContent: video,
+		},
+		MsgType: VideoFileElem,
+	}
+}
 
 // 文本消息元素
 // Text	String	消息内容。当接收方为 iOS 或 Android 后台在线时，作为离线推送的文本展示。
 func NewTextElem(text string) MsgBody {
 	return MsgBody{
 		MsgContent: MsgContent{
-			Text: text,
+			TextContent: TextContent{Text: text},
 		},
 		MsgType: TextElem,
 	}
@@ -29,9 +77,11 @@ func NewTextElem(text string) MsgBody {
 func NewLocationElem(desc string, latitude, longitude float64) MsgBody {
 	return MsgBody{
 		MsgContent: MsgContent{
-			Desc:      desc,
-			Latitude:  latitude,
-			Longitude: longitude,
+			LocationContent: LocationContent{
+				Desc:      desc,
+				Latitude:  latitude,
+				Longitude: longitude,
+			},
 		},
 		MsgType: LocationElem,
 	}
@@ -43,8 +93,10 @@ func NewLocationElem(desc string, latitude, longitude float64) MsgBody {
 func NewFaceElem(index int, data string) MsgBody {
 	return MsgBody{
 		MsgContent: MsgContent{
-			Data:  data,
-			Index: index,
+			FaceContent: FaceContent{
+				Data:  data,
+				Index: index,
+			},
 		},
 		MsgType: FaceElem,
 	}
@@ -60,10 +112,12 @@ func NewFaceElem(index int, data string) MsgBody {
 func NewCustomElem(data, desc, ext, sound string) MsgBody {
 	return MsgBody{
 		MsgContent: MsgContent{
-			Data:  data,
-			Desc:  desc,
-			Ext:   ext,
-			Sound: sound,
+			CustomContent: CustomContent{
+				Data:  data,
+				Desc:  desc,
+				Ext:   ext,
+				Sound: sound,
+			},
 		},
 		MsgType: CustomElem,
 	}
@@ -153,19 +207,23 @@ type RoamMsgReq struct {
 }
 
 type RoamMsg struct {
-	FromAccount  string `json:"From_Account"`
-	ToAccount    string `json:"To_Account"`
-	MsgSeq       int    `json:"MsgSeq"`
-	MsgRandom    int    `json:"MsgRandom"`
-	MsgTimeStamp int    `json:"MsgTimeStamp"`
-	MsgFlagBits  int    `json:"MsgFlagBits"`
-	MsgKey       string `json:"MsgKey"`
-	MsgBody      []struct {
-		MsgType    string `json:"MsgType"`
-		MsgContent struct {
-			Text string `json:"Text"`
-		} `json:"MsgContent"`
-	} `json:"MsgBody"`
+	FromAccount  string            `json:"From_Account"`
+	ToAccount    string            `json:"To_Account"`
+	MsgSeq       int               `json:"MsgSeq"`
+	MsgRandom    int               `json:"MsgRandom"`
+	MsgTimeStamp int               `json:"MsgTimeStamp"`
+	MsgFlagBits  int               `json:"MsgFlagBits"`
+	MsgKey       string            `json:"MsgKey"`
+	MsgBody      []RoamMsgBodyItem `json:"MsgBody"`
+}
+
+type RoamMsgBodyItem struct {
+	MsgType    string              `json:"MsgType"`
+	MsgContent *RoamMsgBodyContent `json:"MsgContent,omitempty"`
+}
+
+type RoamMsgBodyContent struct {
+	Text string `json:"Text"`
 }
 
 type RoamMsgResp struct {
@@ -190,13 +248,94 @@ type MsgBody struct {
 	MsgType    string     `json:"MsgType"`
 }
 
+// 消息内容体嵌套
 type MsgContent struct {
-	Data      string  `json:"Data"`
-	Desc      string  `json:"Desc"`
-	Ext       string  `json:"Ext"`
-	Text      string  `json:"Text"`
-	Sound     string  `json:"Sound"`
-	Index     int     `json:"Index"`
-	Latitude  float64 `json:"Latitude"`
-	Longitude float64 `json:"Longitude"`
+	// 自定义消息 Data + Desc + Ext + Sound
+	CustomContent
+	// 表情消息 Index + Data
+	FaceContent
+	// 定位消息
+	LocationContent
+	// 声音消息 Size + Second + DownloadFlag
+	SoundContent
+	// 文本消息
+	TextContent
+	// 图片消息
+	MsgImageContent
+	// 文件消息
+	FileContent
+	// 视频消息
+	VideoContent
+}
+
+// 自定义消息
+type CustomContent struct {
+	Data  string `json:"Data,omitempty"`
+	Desc  string `json:"Desc,omitempty"`
+	Ext   string `json:"Ext,omitempty"`
+	Sound string `json:"Sound,omitempty"`
+}
+
+// 表情消息
+type FaceContent struct {
+	Data  string `json:"Data,omitempty"`
+	Index int    `json:"Index,omitempty"`
+}
+
+// 文本消息
+type TextContent struct {
+	Text string `json:"Text,omitempty"`
+}
+
+// 定位消息
+type LocationContent struct {
+	Latitude  float64 `json:"Latitude,omitempty"`
+	Longitude float64 `json:"Longitude,omitempty"`
+	Desc      string  `json:"Desc,omitempty"`
+}
+
+// 视频消息
+type VideoContent struct {
+	VideoUrl          string `json:"VideoUrl,omitempty"`          // 视频下载地址。可通过该 URL 地址直接下载相应视频。
+	VideoSize         int    `json:"VideoSize,omitempty"`         // 视频数据大小，单位：字节。
+	VideoSecond       int    `json:"VideoSecond,omitempty"`       // 视频时长，单位：秒。
+	VideoFormat       string `json:"VideoFormat,omitempty"`       // 视频格式，例如 mp4。
+	VideoDownloadFlag int    `json:"VideoDownloadFlag,omitempty"` // 	视频下载方式标记。目前 VideoDownloadFlag 取值只能为2，表示可通过VideoUrl字段值的 URL 地址直接下载视频。
+	ThumbUrl          string `json:"ThumbUrl,omitempty"`          // 视频缩略图下载地址。可通过该 URL 地址直接下载相应视频缩略图。
+	ThumbSize         int    `json:"ThumbSize,omitempty"`         // 缩略图大小，单位：字节。
+	ThumbWidth        int    `json:"ThumbWidth,omitempty"`        // 缩略图宽度。
+	ThumbHeight       int    `json:"ThumbHeight,omitempty"`       // 缩略图高度。
+	ThumbFormat       string `json:"ThumbFormat,omitempty"`       // 缩略图格式，例如 JPG、BMP 等。
+	ThumbDownloadFlag int    `json:"ThumbDownloadFlag,omitempty"` //	视频缩略图下载方式标记。目前 ThumbDownloadFlag 取值只能为2，表示可通过ThumbUrl字段值的 URL 地址直接下载视频缩略图。
+}
+
+// 声音消息
+type SoundContent struct {
+	Size         int `json:"Size"`
+	Second       int `json:"Second,omitempty"`
+	DownloadFlag int `json:"Download_Flag,omitempty"`
+}
+
+// 文件
+type FileContent struct {
+	Url          string // 文件下载地址，可通过该 URL 地址直接下载相应文件。
+	FileSize     int    // 文件数据大小，单位：字节。
+	FileName     string // 文件名称。
+	DownloadFlag uint   // 文件下载方式标记。目前 Download_Flag 取值只能为2，表示可通过Url字段值的 URL 地址直接下载文件。
+}
+
+// 图片消息
+type MsgImageContent struct {
+	UUID           string          `json:"UUID,omitempty"`           // 图片序列号。后台用于索引图片的键值。
+	ImageFormat    uint64          `json:"ImageFormat,omitempty"`    // 图片格式。JPG = 1，GIF = 2，PNG = 3，BMP = 4，其他 = 255。
+	ImageInfoArray []ImageInfoItem `json:"ImageInfoArray,omitempty"` //	原图、缩略图或者大图下载信息。
+}
+
+// 图片信息
+type ImageInfoItem struct {
+	Type   uint   `json:"Type"`   //	图片类型： 1-原图，2-大图，3-缩略图。
+	Size   uint   `json:"Size"`   //   图片数据大小，单位：字节。
+	Width  int    `json:"Width"`  //   图片宽度。
+	Height int    `json:"Height"` //	图片高度。
+	URL    string `json:"Url"`    //   图片下载地址。
 }
