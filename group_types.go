@@ -16,6 +16,9 @@ const (
 	ChatRoomGroup GroupType = "ChatRoom"
 	AVChatRoom    GroupType = "AVChatRoom"
 	BChatRoom     GroupType = "BChatRoom"
+	RoleAdmin               = "Admin"
+	RoleOwner               = "Owner"
+	RoleMember              = "Member "
 )
 
 //Owner_Account	String	选填	群主 ID，自动添加到群成员中。如果不填，群没有群主
@@ -49,16 +52,17 @@ type Group struct {
 }
 
 type MemberList struct {
-	MemberAccount        string           `json:"Member_Account"`
-	Role                 string           `json:"Role"`
-	JoinTime             int64            `json:"JoinTime,omitempty"`
-	MsgSeq               int              `json:"MsgSeq"`
-	MsgFlag              string           `json:"MsgFlag"`
-	LastSendMsgTime      int              `json:"LastSendMsgTime"`
-	ShutUpUntil          int              `json:"ShutUpUntil"`
-	AppMemberDefinedData []AppDefinedData `json:"AppMemberDefinedData"`
-	Result               int              `json:"Result"`
-	UnreadMsgNum         int              `json:"UnreadMsgNum" `
+	MemberAccount        string           `json:"Member_Account"` // 群成员 ID	只读
+	Role                 string           `json:"Role,omitempty"` // 群内身份	群内身份，包括 Owner 群主、Admin 群管理员以及 Member 群成员
+	JoinTime             int64            `json:"JoinTime,omitempty"` // 入群时间	只读
+	MsgSeq               int              `json:"MsgSeq,omitempty"` // 该成员当前已读消息 Seq	只读
+	MsgFlag              string           `json:"MsgFlag,omitempty"` // 消息接收选项	消息接收选项，包括如下几种： AcceptAndNotify 表示接收并提示 AcceptNotNotify 表示接收不提示（不会触发 APNs 远程推送） Discard 表示屏蔽群消息（不会向客户端推送消息）
+	LastSendMsgTime      int              `json:"LastSendMsgTime,omitempty"` // 最后发送消息的时间	支持三个普通群，不支持直播群
+	NameCard             string           `json:"NameCard,omitempty"` // 群名片	可读可写
+	ShutUpUntil          int              `json:"ShutUpUntil,omitempty"`
+	AppMemberDefinedData []AppDefinedData `json:"AppMemberDefinedData,omitempty"`
+	Result               int              `json:"Result,omitempty"`
+	UnreadMsgNum         int              `json:"UnreadMsgNum,omitempty" `
 }
 
 type AppDefinedData struct {
@@ -145,10 +149,10 @@ type ModifyGroupMemberInfo struct {
 //Offset	Integer	选填	从第多少个群组开始拉取，分页方式与 获取 App 中的所有群组 相同
 //GroupType	String	选填	拉取哪种群组形态，例如 Private，Public，ChatRoom 或 AVChatRoom，不填为拉取所有
 type JoinGroupList struct {
-	MemberAccount  string         `json:"Member_Account"`
-	Limit          int            `json:"Limit,omitempty"`
-	Offset         int            `json:"Offset,omitempty"`
-	GroupType      string         `json:"GroupType,omitempty"`
+	MemberAccount  string          `json:"Member_Account"`
+	Limit          int             `json:"Limit,omitempty"`
+	Offset         int             `json:"Offset,omitempty"`
+	GroupType      string          `json:"GroupType,omitempty"`
 	ResponseFilter *ResponseFilter `json:"ResponseFilter,omitempty"`
 }
 
