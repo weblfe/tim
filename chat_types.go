@@ -81,7 +81,7 @@ func NewLocationElem(desc string, latitude, longitude float64) MsgBody {
 				Latitude:  latitude,
 				Longitude: longitude,
 			},
-			Desc:      desc,
+			Desc: desc,
 		},
 		MsgType: LocationElem,
 	}
@@ -93,7 +93,7 @@ func NewLocationElem(desc string, latitude, longitude float64) MsgBody {
 func NewFaceElem(index int, data string) MsgBody {
 	return MsgBody{
 		MsgContent: MsgContent{
-			Data:  data,
+			Data: data,
 			FaceContent: FaceContent{
 
 				Index: index,
@@ -113,8 +113,8 @@ func NewFaceElem(index int, data string) MsgBody {
 func NewCustomElem(data, desc, ext, sound string) MsgBody {
 	return MsgBody{
 		MsgContent: MsgContent{
-			Data:  data,
-			Desc:  desc,
+			Data: data,
+			Desc: desc,
 			CustomContent: CustomContent{
 				Ext:   ext,
 				Sound: sound,
@@ -152,13 +152,13 @@ type BatchChatMsg struct {
 //MsgContent	Object	必填	对于每种 MsgType 用不同的 MsgContent 格式，具体可参考 消息格式描述
 //OfflinePushInfo	Object	选填	离线推送信息配置，具体可参考 消息格式描述
 type ChatMsg struct {
-	SyncOtherMachine  int             `json:"SyncOtherMachine"`
-	SyncFromOldSystem int             `json:"SyncFromOldSystem" `
-	MsgLifeTime       int             `json:"MsgLifeTime"`
-	MsgRandom         int             `json:"MsgRandom"`
-	MsgTimeStamp      int64           `json:"MsgTimeStamp"`
-	MsgBody           []MsgBody       `json:"MsgBody"`
-	OfflinePushInfo   OfflinePushInfo `json:"OfflinePushInfo"`
+	SyncOtherMachine  int              `json:"SyncOtherMachine,omitempty"`
+	SyncFromOldSystem int              `json:"SyncFromOldSystem,omitempty" `
+	MsgLifeTime       int              `json:"MsgLifeTime,omitempty"`
+	MsgRandom         int              `json:"MsgRandom"`
+	MsgTimeStamp      int64            `json:"MsgTimeStamp,omitempty"`
+	MsgBody           []MsgBody        `json:"MsgBody"`
+	OfflinePushInfo   *OfflinePushInfo `json:"OfflinePushInfo,omitempty"`
 }
 
 //https://cloud.tencent.com/document/product/269/2720#.E7.A6.BB.E7.BA.BF.E6.8E.A8.E9.80.81-offlinepushinfo-.E8.AF.B4.E6.98.8E
@@ -174,11 +174,11 @@ type ChatMsg struct {
 //ApnsInfo.SubTitle	String	选填	该字段用于标识 APNs 推送的子标题。
 //ApnsInfo.Image	String	选填	该字段用于标识 APNs 携带的图片地址，当客户端拿到该字段时，可以通过下载图片资源的方式将图片展示在弹窗上。
 type OfflinePushInfo struct {
-	PushFlag    int         `json:"PushFlag"`
-	Desc        string      `json:"Desc"`
-	Ext         string      `json:"Ext"`
-	AndroidInfo AndroidInfo `json:"AndroidInfo"`
-	ApnsInfo    ApnsInfo    `json:"ApnsInfo"`
+	PushFlag    int          `json:"PushFlag"`
+	Desc        string       `json:"Desc"`
+	Ext         string       `json:"Ext"`
+	AndroidInfo *AndroidInfo `json:"AndroidInfo,omitempty"`
+	ApnsInfo    *ApnsInfo    `json:"ApnsInfo,omitempty"`
 }
 
 type ErrorList struct {
