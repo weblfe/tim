@@ -17,7 +17,7 @@ type StateInfo struct {
 		Action    string `json:"Action"`
 		ToAccount string `json:"To_Account"`
 		Reason    string `json:"Reason"`
-	} `json:"Info"`
+	} `json:"Info,omitempty"`
 }
 
 type StateCallBack func(req Req, info StateInfo) error

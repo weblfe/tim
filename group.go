@@ -75,44 +75,111 @@ func AfterGroupInfoChanged(req Req, c echo.Context) error {
 //MemberList	Array	请求创建的群组的初始化成员列表
 //UserDefinedDataList	Array	用户建群时的自定义字段，这个字段默认是没有的，需要开通，详见 自定义字段
 type CallbackGroup struct {
-	CallbackCommand  string `json:"CallbackCommand"`
-	GroupID          string `json:"GroupId"`
-	OperatorAccount  string `json:"Operator_Account"`
-	OwnerAccount     string `json:"Owner_Account"`
-	Type             string `json:"Type"`
-	Name             string `json:"Name"`
-	RequestorAccount string `json:"Requestor_Account" `
-	MemberList       []struct {
-		MemberAccount string `json:"Member_Account"`
-	} `json:"MemberList"`
-	UserDefinedDataList []struct {
-		Key   string `json:"Key"`
-		Value string `json:"Value"`
-	} `json:"UserDefinedDataList"`
-	DestinationMembers []struct {
-		MemberAccount string `json:"Member_Account"`
-	} `json:"DestinationMembers"`
-	JoinType      string `json:"JoinType"`
-	NewMemberList []struct {
-		MemberAccount string `json:"Member_Account"`
-	} `json:"NewMemberList"`
-	ExitType       string `json:"ExitType"`
-	ExitMemberList []struct {
-		MemberAccount string `json:"Member_Account"`
-	} `json:"ExitMemberList"`
-	FromAccount string `json:"From_Account"`
-	Random      int    `json:"Random"`
-	MsgBody     []struct {
-		MsgType    string `json:"MsgType"`
-		MsgContent struct {
-			Text string `json:"Text"`
-		} `json:"MsgContent"`
-	} `json:"MsgBody"`
-	MsgSeq       int    `json:"MsgSeq"`
-	MsgTime      int    `json:"MsgTime"`
-	Introduction string `json:"Introduction"`
-	Notification string `json:"Notification"`
-	FaceURL      string `json:"FaceUrl"`
+	CallbackCommand string           `json:"CallbackCommand"`
+	GroupID         string           `json:"GroupId"`
+	FromAccount     string           `json:"From_Account"`
+	OperatorAccount string           `json:"Operator_Account,omitempty"`
+	OwnerAccount    string           `json:"Owner_Account,omitempty"`
+	Type            string           `json:"Type,omitempty"`
+	Name            string           `json:"Name,omitempty"`
+	MemberList      []MemberListItem `json:"MemberList,omitempty"`
+	Introduction    string           `json:"Introduction,omitempty"`
+	Notification    string           `json:"Notification,omitempty"`
+	FaceURL         string           `json:"FaceUrl,omitempty"`
+	MsgBody         []MsgBody        `json:"MsgBody,omitempty"`
+	GroupBeforeCreateCallback
+	GroupAfterCreateCallback
+	BeforeApplyJoinGroupCallback
+	BeforeInviteJoinGroupCallback
+	AfterNewMemberJoinCallback
+	AfterMemberExitCallback
+	BeforeSendMsgCallback
+	AfterSendMsgCallback
+}
+
+type AfterSendMsgCallback struct {
+	// CallbackCommand string `json:"CallbackCommand"`
+	// GroupID string `json:"GroupId"`
+	// Type string `json:"Type"`
+	// FromAccount string `json:"From_Account"`
+	// OperatorAccount string `json:"Operator_Account"`
+	Random  int `json:"Random,omitempty"`
+	MsgSeq  int `json:"MsgSeq,omitempty"`
+	MsgTime int `json:"MsgTime,omitempty"`
+	// MsgBody []MsgBody `json:"MsgBody"`
+}
+
+type BeforeSendMsgCallback struct {
+	// CallbackCommand string `json:"CallbackCommand"`
+	// GroupID string `json:"GroupId"`
+	// Type string `json:"Type"`
+	// FromAccount string `json:"From_Account"`
+	// OperatorAccount string `json:"Operator_Account"`
+	Random int `json:"Random,omitempty"`
+	// MsgBody []MsgBody `json:"MsgBody,omitempty"`
+}
+
+type AfterMemberExitCallback struct {
+	// CallbackCommand string `json:"CallbackCommand"`
+	// GroupID string `json:"GroupId"`
+	// Type string `json:"Type"`
+	ExitType string `json:"ExitType,omitempty"`
+	// OperatorAccount string `json:"Operator_Account"`
+	ExitMemberList []MemberListItem `json:"ExitMemberList,omitempty"`
+}
+
+type AfterNewMemberJoinCallback struct {
+	// CallbackCommand string `json:"CallbackCommand"`
+	// GroupID string `json:"GroupId"`
+	// Type string `json:"Type"`
+	JoinType string `json:"JoinType,omitempty"`
+	// OperatorAccount string `json:"Operator_Account"`
+	NewMemberList []MemberListItem `json:"NewMemberList,omitempty"`
+}
+
+type BeforeInviteJoinGroupCallback struct {
+	// CallbackCommand    string               `json:"CallbackCommand"`
+	// GroupID            string               `json:"GroupId"`
+	// Type               string               `json:"Type"`
+	// OperatorAccount    string               `json:"Operator_Account"`
+	DestinationMembers []MemberListItem `json:"DestinationMembers,omitempty"`
+}
+
+type GroupAfterCreateCallback struct {
+	// CallbackCommand string `json:"CallbackCommand"`
+	// GroupID string `json:"GroupId"`
+	// OperatorAccount string `json:"Operator_Account"`
+	// OwnerAccount string `json:"Owner_Account"`
+	// Type string `json:"Type"`
+	// Name string `json:"Name"`
+	// MemberList []MemberListItem `json:"MemberList,omitempty"`
+	UserDefinedDataList []UserDefinedDataList `json:"UserDefinedDataList,omitempty"`
+}
+
+type UserDefinedDataList struct {
+	Key   string `json:"Key"`
+	Value string `json:"Value"`
+}
+
+type GroupBeforeCreateCallback struct {
+	// CallbackCommand string           `json:"CallbackCommand"`
+	// OperatorAccount string           `json:"Operator_Account"`
+	// OwnerAccount    string           `json:"Owner_Account"`
+	// Type            string           `json:"Type"`
+	// Name            string           `json:"Name"`
+	CreatedGroupNum int `json:"CreatedGroupNum,omitempty"`
+	// MemberList      []MemberListItem `json:"MemberList,omitempty"`
+}
+
+type BeforeApplyJoinGroupCallback struct {
+	// CallbackCommand string `json:"CallbackCommand"`
+	// GroupID string `json:"GroupId"`
+	// Type string `json:"Type"`
+	RequestorAccount string `json:"Requestor_Account,omitempty"`
+}
+
+type MemberListItem struct {
+	MemberAccount string `json:"Member_Account"`
 }
 
 type CallGroup func(req Req, info CallbackGroup) error

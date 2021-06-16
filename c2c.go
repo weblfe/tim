@@ -26,19 +26,18 @@ func AfterSendMsg(req Req, c echo.Context) error {
 //MsgKey	String	该条消息的唯一标识，可根据该标识进行 REST API 撤回单聊消息
 //MsgBody	Array	消息体，详情请参见 消息格式描述
 type C2CMsg struct {
-	CallbackCommand string `json:"CallbackCommand"`
-	FromAccount     string `json:"From_Account"`
-	ToAccount       string `json:"To_Account"`
-	MsgSeq          int    `json:"MsgSeq"`
-	MsgRandom       int    `json:"MsgRandom"`
-	MsgTime         int    `json:"MsgTime"`
-	MsgKey          string `json:"MsgKey"`
-	MsgBody         []struct {
-		MsgType    string `json:"MsgType"`
-		MsgContent struct {
-			Text string `json:"Text"`
-		} `json:"MsgContent"`
-	} `json:"MsgBody"`
+	CallbackCommand string    `json:"CallbackCommand"`
+	FromAccount     string    `json:"From_Account"`
+	ToAccount       string    `json:"To_Account"`
+	MsgSeq          int       `json:"MsgSeq,omitempty"`
+	MsgRandom       int       `json:"MsgRandom"`
+	MsgTime         int       `json:"MsgTime,omitempty"`
+	MsgKey          string    `json:"MsgKey,omitempty"`
+	MsgBody         []MsgBody `json:"MsgBody,omitempty"`
+	SendMsgResult   int       `json:"SendMsgResult,omitempty"`
+	ErrorInfo       string    `json:"ErrorInfo,omitempty"`
+	UnreadMsgNum    int       `json:"UnreadMsgNum,omitempty"`
+	CloudCustomData string    `json:"CloudCustomData,omitempty"`
 }
 
 type C2CCallBack func(req Req, info C2CMsg) error
