@@ -87,13 +87,14 @@ type CallbackGroup struct {
 	Notification    string           `json:"Notification,omitempty"`
 	FaceURL         string           `json:"FaceUrl,omitempty"`
 	MsgBody         []MsgBody        `json:"MsgBody,omitempty"`
+	Random int `json:"Random,omitempty"`
 	GroupBeforeCreateCallback
 	GroupAfterCreateCallback
 	BeforeApplyJoinGroupCallback
 	BeforeInviteJoinGroupCallback
 	AfterNewMemberJoinCallback
 	AfterMemberExitCallback
-	BeforeSendMsgCallback
+	//BeforeSendMsgCallback
 	AfterSendMsgCallback
 }
 
@@ -103,7 +104,7 @@ type AfterSendMsgCallback struct {
 	// Type string `json:"Type"`
 	// FromAccount string `json:"From_Account"`
 	// OperatorAccount string `json:"Operator_Account"`
-	Random  int `json:"Random,omitempty"`
+	// Random  int `json:"Random,omitempty"`
 	MsgSeq  int `json:"MsgSeq,omitempty"`
 	MsgTime int `json:"MsgTime,omitempty"`
 	// MsgBody []MsgBody `json:"MsgBody"`
@@ -115,7 +116,7 @@ type BeforeSendMsgCallback struct {
 	// Type string `json:"Type"`
 	// FromAccount string `json:"From_Account"`
 	// OperatorAccount string `json:"Operator_Account"`
-	Random int `json:"Random,omitempty"`
+	// Random int `json:"Random,omitempty"`
 	// MsgBody []MsgBody `json:"MsgBody,omitempty"`
 }
 
